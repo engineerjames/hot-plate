@@ -1,1 +1,1 @@
-add_subdirectory(Example_1)
+add_subdirectory(example_1)
