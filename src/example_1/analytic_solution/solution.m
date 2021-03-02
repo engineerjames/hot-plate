@@ -22,7 +22,6 @@
 %    ---------------->
 %    0               a
 
-% We'll prescribe T1 = 300K, T2 = 400K, T3 = 50K, and T4 = 75K
 T1 = 200;
 T2 = 500;
 T3 = 200;
@@ -44,13 +43,6 @@ function coefficients = getCoefficients(n, T1, T2, T3, T4, a, b)
     nPiAOverB = (n*pi*a) / b;
     nPiBOverA = (n*pi*b) / a;
 
-    % Old calculations based on misinterpretation of sin term
-    %An = (T1 * sin(nPiOverA) * a) / sinh(nPiBOverA);
-    %Bn = (T2 * sin(nPiOverA) * a) / sinh(nPiBOverA);
-    %Cn = (T3 * sin(nPiOverB) * b) / sinh(nPiAOverB);
-    %Dn = (T4 * sin(nPiOverB) * b) / sinh(nPiAOverB);
-    %An = ( 2 * T1 * (1 - cos(pi*n))) / (pi * n * sinh(nPiBOverA));
-    %Bn = ( 2 * T2 * (1 - cos(pi*n))) / (pi * n * sinh(nPiBOverA));
     An = (2 * T1 * (a - a * cos(pi*n)) * csch(nPiBOverA)) / (pi * a * n);
     Bn = (2 * T2 * (a - a * cos(pi*n)) * csch(nPiBOverA)) / (pi * a * n);
     Cn = (2 * T3 * (b - b * cos(pi*n)) * csch(nPiAOverB)) / (pi * b * n);
@@ -59,20 +51,15 @@ function coefficients = getCoefficients(n, T1, T2, T3, T4, a, b)
     coefficients = [An Bn Cn Dn];
 end
 
-% There are also four distinct infinite sum
-% for a given (x, y) coordinate
-
 X_STEPS = 100;
 Y_STEPS = 100;
 
 for x = 0:a/X_STEPS:a
     for y = 0:b/Y_STEPS:b
 
-        %x = 0.75;
-        %y = 0.00;
         printf("Getting value for x=%1.3f, y=%1.3f\n", x, y);
 
-        for n = 1:100
+        for n = 1:100 % Number of summations per term
             coeff = getCoefficients(n, T1, T2, T3, T4, a, b);
 
             nPiOverA = (n * pi) / a;
