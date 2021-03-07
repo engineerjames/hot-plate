@@ -5,6 +5,8 @@
 
 #include "Parameters.hpp"
 
+class Walker;
+
 // Initially, the intent is to just have this class manage the execution of
 // a single strategy--we'll iterate through each discrete point in the domain
 // and generate N walks at each point to establish the temperature distribution.
@@ -19,6 +21,8 @@ class RandomWalkerSimulation
     void run();
 
    private:
+    bool walkerIsAtEdge(const Walker& walker) const;
+
     Parameters                           parameters_;
     std::vector< std::vector< double > > temperatures_;
 };

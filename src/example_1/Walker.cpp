@@ -5,7 +5,12 @@ Walker::Walker( Coordinate< double > starting_position )
 {
 }
 
-void Walker::Move( CardinalDirection direction, double spacing_x, double spacing_y )
+const Coordinate< double >& Walker::getPosition() const
+{
+    return position;
+}
+
+void Walker::move( CardinalDirection direction, double spacing_x, double spacing_y )
 {
     switch ( direction )
     {

@@ -9,7 +9,8 @@ class Walker
    public:
     Walker( Coordinate< double > starting_position );
 
-    void Move( CardinalDirection direction, double spacing_x, double spacing_y );
+    void                        move( CardinalDirection direction, double spacing_x, double spacing_y );
+    const Coordinate< double >& getPosition() const;
 
    private:
     Coordinate< double > position;
