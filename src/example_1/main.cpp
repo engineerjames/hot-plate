@@ -2,71 +2,12 @@
 #include <random>
 #include <string>
 
-enum class CardinalDirection
-{
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
-};
-
-template < typename T >
-struct Coordinate
-{
-    T x;
-    T y;
-};
-
-struct DirichletParameters
-{
-    double plateWidth;
-    double plateHeight;
-
-    double Tbottom;
-    double Ttop;
-    double Tleft;
-    double Tright;
-
-    const int N_STEPS_X = 100;
-    const int N_STEPS_Y = 100;
-};
-
-class Walker
-{
-   public:
-    Walker( Coordinate< double > starting_position )
-        : position( starting_position )
-    {
-    }
-
-    void Move( CardinalDirection direction, double spacing_x, double spacing_y )
-    {
-        switch ( direction )
-        {
-            case CardinalDirection::NORTH:
-                position.y += spacing_y;
-                break;
-            case CardinalDirection::EAST:
-                position.x += spacing_x;
-                break;
-            case CardinalDirection::SOUTH:
-                position.y -= spacing_y;
-                break;
-            case CardinalDirection::WEST:
-                position.x -= spacing_x;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-   private:
-    Coordinate< double > position;
-};
+#include "CardinalDirection.hpp"
+#include "Coordinate.hpp"
+#include "Parameters.hpp"
+#include "Walker.hpp"
 
 constexpr static const int EXPECTED_ARGS = 7;
-constexpr static const int N_WALKS       = 500;
 
 // Expect application to be called via:
 // james$ ./main a b T1 T2 T3 T4
@@ -78,7 +19,7 @@ int main( int argc, const char **args )
         return 255;
     }
 
-    DirichletParameters dp {};
+    Parameters dp { 100, 100, 500 };
 
     // Just hard-code for now
     dp.plateWidth  = std::stod( args[1] );
@@ -95,7 +36,7 @@ int main( int argc, const char **args )
     // direction 0 - NORTH 1 - EAST 2 - SOUTH 3 - WEST
     std::uniform_int_distribution<> uniform_distribution { 0, 3 };
 
-    for ( int i = 0; i < N_WALKS; ++i )
+    for ( int i = 0; i < dp.N_WALKERS; ++i )
     {
         std::cout << uniform_distribution( generator ) << std::endl;
         CardinalDirection direction = static_cast< CardinalDirection >( uniform_distribution( generator ) );
