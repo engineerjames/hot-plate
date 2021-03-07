@@ -1,26 +1,33 @@
 #ifndef HOTPLATE_PARAMETERS_HPP
 #define HOTPLATE_PARAMETERS_HPP
 
+#include <iostream>
+
 struct Parameters
 {
-    double plateWidth;
-    double plateHeight;
-
-    double Tbottom;
-    double Ttop;
-    double Tleft;
-    double Tright;
-
-    Parameters( int xSteps, int ySteps, int numberOfWalkers )
-        : N_STEPS_X( xSteps )
-        , N_STEPS_Y( ySteps )
-        , N_WALKERS( numberOfWalkers )
+    struct Geometry
     {
-    }
+        double plateWidth;
+        double plateHeight;
+    };
 
-    const int N_STEPS_X;
-    const int N_STEPS_Y;
-    const int N_WALKERS;
+    struct Temperatures
+    {
+        double Tbottom;
+        double Ttop;
+        double Tleft;
+        double Tright;
+    };
+
+    Parameters( int xSteps, int ySteps, int numberOfWalkers, Parameters::Geometry geometry, Parameters::Temperatures temperatures );
+
+    const int                      N_STEPS_X;
+    const int                      N_STEPS_Y;
+    const int                      N_WALKERS;
+    const Parameters::Geometry     GEOMETRY;
+    const Parameters::Temperatures TEMPERATURES;
 };
+
+std::ostream& operator<< (std::ostream& os, const Parameters& params);
 
 #endif
