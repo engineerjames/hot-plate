@@ -2,6 +2,8 @@ set( target main )
 
 set( sources
   main.cpp
+  Parameters.cpp
+  RandomWalkerSimulation.cpp
   Walker.cpp
 )
 

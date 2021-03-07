@@ -1,6 +1,8 @@
 #ifndef HOTPLATE_RANDOM_WALKER_SIMULATION_HPP
 #define HOTPLATE_RANDOM_WALKER_SIMULATION_HPP
 
+#include <vector>
+
 #include "Parameters.hpp"
 
 // Initially, the intent is to just have this class manage the execution of
@@ -10,13 +12,15 @@
 // computational approaches can be explored (Heavy parallelization, GPU acceleration, etc.)
 class RandomWalkerSimulation
 {
-  public:
-    RandomWalkerSimulation(const Parameters& params);
+   public:
+    RandomWalkerSimulation( const Parameters& params );
 
+    void initialize();
     void run();
 
-  private:
-    Parameters parameters_;
+   private:
+    Parameters                           parameters_;
+    std::vector< std::vector< double > > temperatures_;
 };
 
 #endif

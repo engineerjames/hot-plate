@@ -1,10 +1,10 @@
 #include <iostream>
-#include <random>
-#include <string>
+#include <memory>
 
 #include "CardinalDirection.hpp"
 #include "Coordinate.hpp"
 #include "Parameters.hpp"
+#include "RandomWalkerSimulation.hpp"
 #include "Walker.hpp"
 
 constexpr static const int EXPECTED_ARGS = 7;
@@ -19,30 +19,23 @@ int main( int argc, const char **args )
         return 255;
     }
 
-    Parameters dp { 100, 100, 500 };
+    Parameters::Geometry     geometryParams {};
+    Parameters::Temperatures temperatureParams {};
 
-    // Just hard-code for now
-    dp.plateWidth  = std::stod( args[1] );
-    dp.plateHeight = std::stod( args[2] );
-    dp.Tbottom     = std::stod( args[3] );
-    dp.Ttop        = std::stod( args[4] );
-    dp.Tleft       = std::stod( args[5] );
-    dp.Tright      = std::stod( args[6] );
+    geometryParams.plateWidth  = std::stod( args[1] );
+    geometryParams.plateHeight = std::stod( args[2] );
 
-    std::random_device randomDevice {};
-    std::mt19937       generator( randomDevice() );
+    temperatureParams.Tbottom = std::stod( args[3] );
+    temperatureParams.Ttop    = std::stod( args[4] );
+    temperatureParams.Tleft   = std::stod( args[5] );
+    temperatureParams.Tright  = std::stod( args[6] );
 
-    // Closed interval, each number will represent movement in a cardinal
-    // direction 0 - NORTH 1 - EAST 2 - SOUTH 3 - WEST
-    std::uniform_int_distribution<> uniform_distribution { 0, 3 };
+    Parameters dp { 100, 100, 500, geometryParams, temperatureParams };
 
-    for ( int i = 0; i < dp.N_WALKERS; ++i )
-    {
-        std::cout << uniform_distribution( generator ) << std::endl;
-        CardinalDirection direction = static_cast< CardinalDirection >( uniform_distribution( generator ) );
-        Walker            w { Coordinate< double >() };
-        w.Move( direction, 0.1, 0.1 );
-    }
+    auto sim = std::make_unique< RandomWalkerSimulation >( dp );
+
+    sim->initialize();
+    sim->run();
 
     return 0;
 }
