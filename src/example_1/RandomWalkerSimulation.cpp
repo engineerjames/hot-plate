@@ -32,9 +32,11 @@ void RandomWalkerSimulation::run()
     double discretized_x = parameters_.GEOMETRY.plateWidth / parameters_.N_STEPS_X;
     double discretized_y = parameters_.GEOMETRY.plateHeight / parameters_.N_STEPS_Y;
 
-    for ( int i = 0; i < parameters_.N_STEPS_X; ++i )
+    // We don't need to start at any edge, since the temperature at each
+    // edge is established by the boundary conditions.
+    for ( int i = 1; i < parameters_.N_STEPS_X - 1; ++i )
     {
-        for ( int j = 0; j < parameters_.N_STEPS_Y; ++j )
+        for ( int j = 1; j < parameters_.N_STEPS_Y - 1; ++j )
         {
             Coordinate< double > startingPosition {};
             startingPosition.x = i * discretized_x;
@@ -52,9 +54,16 @@ void RandomWalkerSimulation::run()
                     walksToEdge++;
                 }
 
-                std::cout << "Only needed " << walksToEdge << " to find edge." << std::endl;
                 temperatures_[i][j] += getEdgeTemperature( walker );
             }
+        }
+    }
+
+    for ( auto& column : temperatures_ )
+    {
+        for ( auto& val : column )
+        {
+            val /= parameters_.N_WALKERS;
         }
     }
 }

@@ -30,7 +30,7 @@ int main( int argc, const char **args )
     temperatureParams.Tleft   = std::stod( args[5] );
     temperatureParams.Tright  = std::stod( args[6] );
 
-    Parameters dp { 100, 100, 500, geometryParams, temperatureParams };
+    Parameters dp { 200, 200, 1000, geometryParams, temperatureParams };
 
     auto sim = std::make_unique< RandomWalkerSimulation >( dp );
 

@@ -14,7 +14,7 @@ set( headers
   Walker.hpp
 )
 
-add_executable(${target} ${sources} ${headers} )
+add_executable(${target} ${sources} ${headers})
 
 if (NOT MSVC)
   target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
