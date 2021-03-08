@@ -32,16 +32,16 @@ void RandomWalkerSimulation::run()
     double discretized_x = parameters_.GEOMETRY.plateWidth / parameters_.N_STEPS_X;
     double discretized_y = parameters_.GEOMETRY.plateHeight / parameters_.N_STEPS_Y;
 
-    Coordinate< double > startingPosition {};
-    startingPosition.x = 0 + discretized_x;
-    startingPosition.y = 0 + discretized_y;
-
-    Walker walker { startingPosition };
-
     for ( int i = 0; i < parameters_.N_STEPS_X; ++i )
     {
         for ( int j = 0; j < parameters_.N_STEPS_Y; ++j )
         {
+            Coordinate< double > startingPosition {};
+            startingPosition.x = i * discretized_x;
+            startingPosition.y = j * discretized_y;
+
+            Walker walker { startingPosition };
+
             for ( int n = 0; n < parameters_.N_WALKERS; ++n )
             {
                 int walksToEdge = 0;
@@ -53,13 +53,38 @@ void RandomWalkerSimulation::run()
                 }
 
                 std::cout << "Only needed " << walksToEdge << " to find edge." << std::endl;
-                // Need to know what edge it was at...
-                temperatures_[i][j] += 100;  // Temperature of the edge for each walker
-                walker = Walker { startingPosition };
+                temperatures_[i][j] += getEdgeTemperature( walker );
             }
-
-            temperatures_[i][j] /= parameters_.N_WALKERS;
         }
+    }
+}
+
+double RandomWalkerSimulation::getEdgeTemperature( const Walker& walker ) const
+{
+    const Coordinate< double >& walkerPosition = walker.getPosition();
+
+    // One temperature will end up getting favored at the corners (since the walker will be present
+    // on two edges simultaneously)
+    if ( walkerPosition.x <= 0.0 )
+    {
+        return parameters_.TEMPERATURES.Tleft;
+    }
+    else if ( walkerPosition.x >= parameters_.GEOMETRY.plateWidth )
+    {
+        return parameters_.TEMPERATURES.Tright;
+    }
+    else if ( walkerPosition.y <= 0.0 )
+    {
+        return parameters_.TEMPERATURES.Tbottom;
+    }
+    else if ( walkerPosition.y >= parameters_.GEOMETRY.plateHeight )
+    {
+        return parameters_.TEMPERATURES.Ttop;
+    }
+    else
+    {
+        std::cerr << "Walker should not have made it here: " << walker.getPosition().x << ", " << walker.getPosition().y << std::endl;
+        return 0.0;
     }
 }
 

@@ -22,6 +22,7 @@ class RandomWalkerSimulation
 
    private:
     bool walkerIsAtEdge(const Walker& walker) const;
+    double getEdgeTemperature(const Walker& walker) const;
 
     Parameters                           parameters_;
     std::vector< std::vector< double > > temperatures_;
