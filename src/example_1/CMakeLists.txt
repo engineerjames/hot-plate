@@ -10,6 +10,7 @@ set( sources
 set( headers
   CardinalDirection.hpp
   Coordinate.hpp
+  MatrixWriter.hpp
   Parameters.hpp
   Walker.hpp
 )

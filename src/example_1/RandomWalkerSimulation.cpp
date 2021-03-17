@@ -110,6 +110,11 @@ bool RandomWalkerSimulation::walkerIsAtEdge( const Walker& walker ) const
     return false;
 }
 
+const RandomWalkerSimulation::MatrixType& RandomWalkerSimulation::getTemperatures() const
+{
+    return temperatures_;
+}
+
 RandomWalkerSimulation::RandomWalkerSimulation( const Parameters& params )
     : parameters_( params )
     , temperatures_( params.N_STEPS_X )

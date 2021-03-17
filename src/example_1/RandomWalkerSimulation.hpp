@@ -15,7 +15,9 @@ class Walker;
 class RandomWalkerSimulation
 {
    public:
+    typedef std::vector< std::vector< double > > MatrixType;
     RandomWalkerSimulation( const Parameters& params );
+    const MatrixType& getTemperatures() const;
 
     void initialize();
     void run();
@@ -24,8 +26,8 @@ class RandomWalkerSimulation
     bool   walkerIsAtEdge( const Walker& walker ) const;
     double getEdgeTemperature( const Walker& walker ) const;
 
-    Parameters                           parameters_;
-    std::vector< std::vector< double > > temperatures_;
+    Parameters parameters_;
+    MatrixType temperatures_;
 };
 
 #endif
